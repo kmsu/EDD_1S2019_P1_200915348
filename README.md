@@ -7,4 +7,4 @@ email: ingkevins@gmail.com<br>
 
 
 #### Description
-We can have a short description of our project, in a way that is understandable for the people reading it.
+this is a simple version of the classic game "snake". this game has been programmed whith python 3, and use some structures like, stak, queue and linkedlist. run whit system console.
