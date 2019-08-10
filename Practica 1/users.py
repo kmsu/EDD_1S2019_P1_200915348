@@ -72,6 +72,16 @@ class circular:
                 temp=temp.next
             print (temp.data, end = ' ')
 
+    def print_list_graphiz(self):
+        if self.head is None:
+            print('Lista Vacia')
+        else:
+            temp = self.head
+            while temp.next is not self.head:
+                print(temp.data, end = " ")
+                print(" ")
+                temp=temp.next
+            print (temp.data, end = ' ')
 
     def archivo(self):
         with open('usuarios.csv') as file:
@@ -82,13 +92,13 @@ class circular:
 
 
 
-s = circular()
+#s = circular()
 #s.archivo()
 #s.add(1)
-s.addNode(node(2))
-s.addNode(node(3))
-s.addNode(node(4))
-s.addNode(node(5))
-s.print_list()
-print(" ")
+#s.addNode(node(2))
+#s.addNode(node(3))
+#s.addNode(node(4))
+#s.addNode(node(5))
+#s.print_list()
+#print(" ")
 #s.print_list()
