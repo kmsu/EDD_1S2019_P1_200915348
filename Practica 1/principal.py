@@ -28,11 +28,12 @@ snake.startSnake()
 nodeHeadSnake = snake.getHead()
 nodeTailSnake = snake.getLast()
 
-x_coordinate = random.randint(0,60)
-y_coordinate = random.randint(0,20)
+x_coordinate = random.randint(0,58)
+y_coordinate = random.randint(0,18)
 type = random.randint(0,100)
+type_food = 0
 
-if type <= 20:
+if type <= 50:
     type_food = 0 #bocadillo malo
     window.addch(y_coordinate, x_coordinate, '*')
 else:
@@ -53,7 +54,7 @@ window.addch(aux.data_y, aux.data_x, '#')
 
 #run program while [ESC] key is not pressed
 while key != 27:
-    window.timeout(100000)
+    window.timeout(1000)
     keystroke = window.getch()
     if keystroke is not -1:
         key = keystroke
@@ -63,7 +64,7 @@ while key != 27:
     if key == KEY_RIGHT:
         #print("entre al if derecha")
         #obtener el ultimo nodo y poner la coordenad del nodo anterior
-        temp = nodeTailSnake
+        temp = snake.getLast()
         window.addch(temp.data_y, temp.data_x, ' ')
         while temp.previous is not None:
             #aux = temp.next
@@ -73,13 +74,32 @@ while key != 27:
             temp = temp.previous
         temp.data_x = temp.data_x + 1
         window.addch(temp.data_y, temp.data_x, '#')
+
         if nodeHeadSnake.data_x == x_coordinate and nodeHeadSnake.data_y == y_coordinate:
-            snake.addList(int(x_coordinate), int(y_coordinate))
-            snake.print_list()
+            if type_food == 1:
+                print("coordenada x comida" + str(x_coordinate), end = " ")
+                print("coordenada y comida" + str(y_coordinate), end = " ")
+                print(" ")
+                snake.addList(int(x_coordinate), int(y_coordinate))
+                snake.print_list()
+            else:
+                snake.delete()
+            x_coordinate = random.randint(0,58)
+            y_coordinate = random.randint(0,18)
+            type = random.randint(0,100)
+            type_food = 0
+
+            if type <= 50:
+                type_food = 0 #bocadillo malo
+                window.addch(y_coordinate, x_coordinate, '*')
+            else:
+                type_food = 1 #bocadillo bueno
+                window.addch(y_coordinate, x_coordinate, '+')
+
 
         #pos_x = pos_x + 1
     elif key == KEY_LEFT:
-        temp = nodeTailSnake
+        temp = snake.getLast()
         window.addch(temp.data_y, temp.data_x, ' ')
         while temp.previous is not None:
             #aux = temp.next
@@ -89,13 +109,31 @@ while key != 27:
             temp = temp.previous
         temp.data_x = temp.data_x - 1
         window.addch(temp.data_y, temp.data_x, '#')
+
         if nodeHeadSnake.data_x == x_coordinate and nodeHeadSnake.data_y == y_coordinate:
-            snake.addList(int(x_coordinate), int(y_coordinate))
-            snake.print_list()
+            if type_food == 1:
+                print("coordenada x comida" + str(x_coordinate), end = " ")
+                print("coordenada y comida" + str(y_coordinate), end = " ")
+                print(" ")
+                snake.addList(int(x_coordinate), int(y_coordinate))
+                snake.print_list()
+            else:
+                snake.delete()
+            x_coordinate = random.randint(0,58)
+            y_coordinate = random.randint(0,18)
+            type = random.randint(0,100)
+            type_food = 0
+
+            if type <= 50:
+                type_food = 0 #bocadillo malo
+                window.addch(y_coordinate, x_coordinate, '*')
+            else:
+                type_food = 1 #bocadillo bueno
+                window.addch(y_coordinate, x_coordinate, '+')
 
         #pos_x = pos_x - 1
     elif key == KEY_UP:
-        temp = nodeTailSnake
+        temp = snake.getLast()
         window.addch(temp.data_y, temp.data_x, ' ')
         while temp.previous is not None:
             #aux = temp.next
@@ -105,13 +143,31 @@ while key != 27:
             temp = temp.previous
         temp.data_y = temp.data_y - 1
         window.addch(temp.data_y, temp.data_x, '#')
+
         if nodeHeadSnake.data_x == x_coordinate and nodeHeadSnake.data_y == y_coordinate:
-            snake.addList(int(x_coordinate), int(y_coordinate))
-            snake.print_list()
+            if type_food == 1:
+                print("coordenada x comida" + str(x_coordinate), end = " ")
+                print("coordenada y comida" + str(y_coordinate), end = " ")
+                print(" ")
+                snake.addList(int(x_coordinate), int(y_coordinate))
+                snake.print_list()
+            else:
+                snake.delete()
+            x_coordinate = random.randint(0,58)
+            y_coordinate = random.randint(0,18)
+            type = random.randint(0,100)
+            type_food = 0
+
+            if type <= 50:
+                type_food = 0 #bocadillo malo
+                window.addch(y_coordinate, x_coordinate, '*')
+            else:
+                type_food = 1 #bocadillo bueno
+                window.addch(y_coordinate, x_coordinate, '+')
         #pos_y = pos_y - 1
 
     elif key == KEY_DOWN:
-        temp = nodeTailSnake
+        temp = snake.getLast()
         window.addch(temp.data_y, temp.data_x, ' ')
         while temp.previous is not None:
             #aux = temp.next
@@ -121,37 +177,51 @@ while key != 27:
             temp = temp.previous
         temp.data_y = temp.data_y + 1
         window.addch(temp.data_y, temp.data_x, '#')
+
         if nodeHeadSnake.data_x == x_coordinate and nodeHeadSnake.data_y == y_coordinate:
-            snake.addList(int(x_coordinate), int(y_coordinate))
-            snake.print_list()
+            if type_food == 1:
+                print("coordenada x comida " + str(x_coordinate), end = " ")
+                print("coordenada y comida " + str(y_coordinate), end = " ")
+                print(" ")
+                snake.addList(int(x_coordinate), int(y_coordinate))
+                snake.print_list()
+            else:
+                snake.delete()
+            x_coordinate = random.randint(0,58)
+            y_coordinate = random.randint(0,18)
+            type = random.randint(0,100)
+            type_food = 0
+
+            if type <= 50:
+                type_food = 0 #bocadillo malo
+                window.addch(y_coordinate, x_coordinate, '*')
+            else:
+                type_food = 1 #bocadillo bueno
+                window.addch(y_coordinate, x_coordinate, '+')
         #pos_y = pos_y + 1
 
 #----------------------------------avoid the snake die when touch the walls------------------------
-    print("este es x de head: " + str(nodeHeadSnake.data_x))
-    print("este es y de head: " + str(nodeHeadSnake.data_y))
-    print(" ")
-    print("este es x: " + str(nodeTailSnake.data_x))
-    print("este es y: " + str(nodeTailSnake.data_y))
-    print(" ")
-    if(int(nodeHeadSnake.data_x) > 58):
-        window.addch(nodeTailSnake.data_y, nodeTailSnake.data_x, ' ')
-        nodeTailSnake.data_x = 5
 
-        window.addstr(10, 10, str(nodeTailSnake.data_x))
-
-    elif(nodeTailSnake.data_x < 1):
+    if(nodeHeadSnake.data_x > 58):
+        window.addch(nodeHeadSnake.data_y, nodeHeadSnake.data_x, ' ')
+        nodeHeadSnake.data_x = 1
+        window.addch(nodeHeadSnake.data_y, nodeHeadSnake.data_x, '#')
+    elif(nodeHeadSnake.data_x < 1):
         window.addstr(nodeHeadSnake.data_y, nodeHeadSnake.data_x, ' ')
-        nodeTailSnake.data_x = 58
+        nodeHeadSnake.data_x = 58
+        window.addch(nodeHeadSnake.data_y, nodeHeadSnake.data_x, '#')
         #pos_x = 58
         #window.addstr(pos_y, pos_x, '#')
-    elif(nodeTailSnake.data_y > 18):
+    elif(nodeHeadSnake.data_y > 18):
         window.addstr(nodeHeadSnake.data_y, nodeHeadSnake.data_x, ' ')
-        nodeTailSnake.data_y = 1
+        nodeHeadSnake.data_y = 1
+        window.addch(nodeHeadSnake.data_y, nodeHeadSnake.data_x, '#')
         #pos_y = 1
         #window.addstr(pos_y, pos_x, '#')
-    elif(nodeTailSnake.data_y < 1):
+    elif(nodeHeadSnake.data_y < 1):
         window.addstr(nodeHeadSnake.data_y, nodeHeadSnake.data_x, ' ')
-        nodeTailSnake.data_y = 18
+        nodeHeadSnake.data_y = 18
+        window.addch(nodeHeadSnake.data_y, nodeHeadSnake.data_x, '#')
         #pos_y = 18
         #window.addstr(pos_y, pos_x, '#')
 
