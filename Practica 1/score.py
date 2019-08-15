@@ -35,6 +35,9 @@ class pila:
             print (temp.data_x, end = ' ')
             print (temp.data_y, end = ' ')
 
+    def getHead(self):
+        return self.head
+
     def count_list(self):
         size = 1
         if self.head is None:
