@@ -1,0 +1,6 @@
+digraph scoreboard{
+node [shape=record];
+rankdir=LR;
+node0 [label = "(b'kevin',3)"];
+nodef [label = "null"];node0 -> nodef;
+}
