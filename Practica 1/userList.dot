@@ -1,0 +1,7 @@
+digraph users{
+node [shape=record];
+rankdir=LR;
+node0 [label = "b'kevin'"];
+node0 -> node0
+node0 -> node0
+}
