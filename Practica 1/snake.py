@@ -1,3 +1,6 @@
+import os.path
+import sys
+
 class node:
     def __init__(self, name_x = 0, name_y = 0, next = None, previous = None): #constructor de clase
         self.data_x = name_x #atributo que almacena el dato del nodo
@@ -178,7 +181,37 @@ class doubleLinkedList:
 
     def clear_list(self):
         self.head = None
-        self.startSnake()
+        #self.startSnake()
+
+    def snakeReport(self):
+        node = self.head
+        if node is None:
+            print_center(s, "list empty")
+        else:
+            #Create report by graphiz
+            f = open('snakeList.dot', 'w')
+            f.write('digraph snake{\n')
+            f.write('node [shape=record];\n')
+            f.write('rankdir=LR;\n')
+            f.write('node0 -> nodei;')
+            f.write('nodei [label = "null"];')
+            #temp=node
+            count = 0
+            #print(str(node.data_x))
+            #print(str(node.data_y))
+            while node.next is not None:
+                f.write('node{} [label=\"{}\"];\n'.format(count, "(" + str(node.data_x) + "," + str(node.data_y) + ")"))
+                count += 1
+                f.write('node{} -> node{};\n'.format(count-1, count))
+                f.write('node{} -> node{};\n'.format(count, count-1))
+                node = node.next
+            f.write('node{} [label = \"{}\"];\n'.format(count, "(" + str(node.data_x) + "," + str(node.data_y) + ")"))
+            f.write('nodef [label = "null"];')
+            f.write('node'+ str(count) + ' -> nodef;\n')
+            f.write('}')
+            f.close()
+            os.system('dot snakeList.dot -Tpng -o snakeList.png')
+            os.system('snakeList.png')
 
 #PROBAR OBTENER EL ULTIMO ANTES DE TRABAJAR EN LA CLASE PRINCIPAL
 
