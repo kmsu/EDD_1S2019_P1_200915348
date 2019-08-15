@@ -1,0 +1,21 @@
+digraph snake{
+node [shape=record];
+rankdir=LR;
+node0 -> nodei;nodei [label = "null"];node0 [label="(17,2)"];
+node0 -> node1;
+node1 -> node0;
+node1 [label="(17,3)"];
+node1 -> node2;
+node2 -> node1;
+node2 [label="(16,3)"];
+node2 -> node3;
+node3 -> node2;
+node3 [label="(16,2)"];
+node3 -> node4;
+node4 -> node3;
+node4 [label="(17,2)"];
+node4 -> node5;
+node5 -> node4;
+node5 [label = "(18,2)"];
+nodef [label = "null"];node5 -> nodef;
+}
