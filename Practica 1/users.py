@@ -83,18 +83,23 @@ class circular:
                 temp=temp.next
             print (temp.data, end = ' ')
 
-    def archivo(self):
-        with open('usuarios.csv') as file:
+    def archivo(self, nameFile):
+        with open(nameFile) as file:
             reader = csv.reader(file)
             next(file)
             for row in reader:
                 self.addNode(node(row[0]))
 
+    def insertarNodo(self, text):
+        self.addNode(node(text))
+
 
 
 #s = circular()
 #s.archivo()
-#s.add(1)
+#s.insertarNodo("juan")
+#s.insertarNodo("pedro")
+#s.insertarNodo("neto")
 #s.addNode(node(2))
 #s.addNode(node(3))
 #s.addNode(node(4))
