@@ -17,6 +17,8 @@ snake = doubleLinkedList()
 score = pila()
 Scoreboard = queue()
 
+#for exit of game  without saving the actual game pres end key
+
 menu = ["Play", "Scoreboard", "User selection", "Reports", "Bulk loading", "Exit"]
 menuReport = ["Users", "Snake Report","Score Report", "scoreboard Report"]
 #user_in_game = None
@@ -28,13 +30,14 @@ def paint_title(win,var):
     win.addstr(0,x_start,var)
 
 #paint for the snake not erase the window when cross the walls
-def paint_title_game(win, var, score_game):
+def paint_title_game(win, var, score_game, user):
     win.border(0)
     x_start = round((60-len(var))/2)
     win.addstr(0,x_start,var)
     show = "score: " + str(score_game)
     win.addstr(0,0, show)
-
+    x = round((60-len(user)))
+    win.addstr(0, x, user)
 #def paint_score(win, score_game):
 #    #win.border(0)
 #    show = "score: " + str(score_game)
@@ -137,7 +140,7 @@ def main(stdscr):
     user_in_game = None
     global score_game
     score_game = 0
-    status = 0 # 0 = pay new game, 1 = continue last game
+    inGame = False # 0 = pay new game, 1 = continue last game
     level = 100
     #key = 0
     #variables of food
@@ -167,7 +170,7 @@ def main(stdscr):
             #play game option
             if current_row == 0:
                 paint_title(s, "Play")
-                paint_title_game(s, "Play", score_game)
+                #paint_title_game(s, "Play", score_game)
                 #paint_score(s, score_game)
                 nameUser = userList.getHead()
                 if user_in_game is None:
@@ -185,7 +188,10 @@ def main(stdscr):
                     s.nodelay(True)
                     key = curses.KEY_RIGHT
                     #start snake with size 3
-                    snake.startSnake()
+                    if inGame == False:
+                        snake.startSnake()
+                        inGame = True
+                        level = 100
                     #get head and tail of snake
                     nodeHeadSnake = snake.getHead()
                     nodeTailSnake = snake.getLast()
@@ -199,7 +205,7 @@ def main(stdscr):
                     s.addch(aux.data_y, aux.data_x, '#')
                     #run program while [ESC] key is not pressed
                     while key != 27:
-                        s.timeout(10000)#level es el valor que debe quedar
+                        s.timeout(level)#level es el valor que debe quedar
                         keystroke = s.getch()
                         if keystroke is not -1:
                             key = keystroke
@@ -236,9 +242,11 @@ def main(stdscr):
                                     Scoreboard.enqueue(str(user_in_game), score_game)
                                 else:
                                     Scoreboard.enqueue(str(user_in_game), score_game)
+                                snake.snakeReport()
                                 snake.clear_list()
                                 score.clear_list()
                                 score_game = 0
+                                inGame = False
                                 break
 
                             snakeSize(s) #verify if head is on snack and increases or decrease according to snack
@@ -274,9 +282,11 @@ def main(stdscr):
                                     Scoreboard.enqueue(str(user_in_game), score_game)
                                 else:
                                     Scoreboard.enqueue(str(user_in_game), score_game)
+                                snake.snakeReport()
                                 snake.clear_list()
                                 score.clear_list()
                                 score_game = 0
+                                inGame = False
                                 break
 
                             snakeSize(s)
@@ -310,9 +320,11 @@ def main(stdscr):
                                     Scoreboard.enqueue(str(user_in_game), score_game)
                                 else:
                                     Scoreboard.enqueue(str(user_in_game), score_game)
+                                snake.snakeReport()
                                 snake.clear_list()
                                 score.clear_list()
                                 score_game = 0
+                                inGame = False
                                 break
 
                             snakeSize(s)
@@ -346,13 +358,23 @@ def main(stdscr):
                                     Scoreboard.enqueue(str(user_in_game), score_game)
                                 else:
                                     Scoreboard.enqueue(str(user_in_game), score_game)
+                                snake.snakeReport()
                                 snake.clear_list()
                                 score.clear_list()
                                 score_game = 0
+                                inGame = False
                                 break
 
                             #increases or decrease the size of snake
                             snakeSize(s)
+
+                        #exit without saving game
+                        elif key == curses.KEY_END:
+                            snake.clear_list()
+                            score.clear_list()
+                            score_game = 0
+                            inGame = False
+                            break
 
 #--------------------------avoid the snake die whwen touch the walls--------
                         val = snake.getHead()
@@ -378,10 +400,12 @@ def main(stdscr):
                             #paint_title_game(s, "Play", score_game)
 
                         #paint_title_game(s, "play", str(score.count_list()))
-                        paint_title_game(s, "play", str(score_game))
+                        paint_title_game(s, "play", str(score_game), str(user_in_game))
 
-                        if score.count_list() == 5:
+                        if score_game == 15:
+                            score.clear_list()
                             level = 50
+
                     paint_menu(s, current_row)
 
             #Scoreboard
@@ -427,7 +451,12 @@ def main(stdscr):
                             print_user(s, "<- " + user.data + " ->", "User selection")
                             nodeUser = user
                         elif key == curses.KEY_ENTER or key in [10, 13]:
-                            user_in_game = nodeUser.data
+                            if inGame == True:
+                                pass
+                                #paint_title(s, "user selection")
+                                #s.addstr(10,10,"you can't select other user while play is in pause")
+                            else:
+                                user_in_game = nodeUser.data
                             break
                         elif key == 27:
                             break
@@ -478,37 +507,97 @@ def main(stdscr):
                         #Snake Report
                         if current_row_report == 1:
                             paint_title(s, "Snake Report")
+
                             node = snake.getHead()
                             if node is None:
                                 print_center(s, "list empty")
                             else:
                                 #Create report by graphiz
                                 f = open('snakeList.dot', 'w')
-                                f.write('digraph users{\n')
+                                f.write('digraph snake{\n')
                                 f.write('node [shape=record];\n')
                                 f.write('rankdir=LR;\n')
                                 f.write('node0 -> nodei;')
                                 f.write('nodei [label = "null"];')
-                                temp=node
+                                #temp=node
                                 count = 0
-                                while temp.next is not node:
-                                    f.write('node{} [label=\"{}\"];\n'.format(count, "(" + str(temp.data_x) + "," + str(temp.data_y) + ")"))
+                                #print(str(node.data_x))
+                                #print(str(node.data_y))
+                                while node.next is not None:
+                                    f.write('node{} [label=\"{}\"];\n'.format(count, "(" + str(node.data_x) + "," + str(node.data_y) + ")"))
                                     count += 1
                                     f.write('node{} -> node{};\n'.format(count-1, count))
                                     f.write('node{} -> node{};\n'.format(count, count-1))
-                                    temp = temp.next
-                                f.write('node{} [label = \"{}\"];\n'.format(count, "(" + str(temp.data_x) + "," + str(temp.data_y) + ")"))
-                                f.write('node'+ str(count) + ' -> node0\n')
-                                f.write('node0 -> node' + str(count) + '\n')
+                                    node = node.next
+                                f.write('node{} [label = \"{}\"];\n'.format(count, "(" + str(node.data_x) + "," + str(node.data_y) + ")"))
+                                f.write('nodef [label = "null"];')
+                                f.write('node'+ str(count) + ' -> nodef;\n')
                                 f.write('}')
                                 f.close()
-                                os.system('dot userList.dot -Tpng -o userList.png')
-                                os.system('userList.png')
+                                os.system('dot snakeList.dot -Tpng -o snakeList.png')
+                                os.system('snakeList.png')
+                                print_center(s, "user report created")
+
+                        #Score Report
+                        if current_row_report == 2:
+                            paint_title(s, "Score Report")
+
+                            node = score.getHead()
+                            if node is None:
+                                print_center(s, "list empty")
+                            else:
+                                #Create report by graphiz
+                                f = open('scoreList.dot', 'w')
+                                f.write('digraph users{\n')
+                                f.write('node [shape=record];\n')
+                                f.write('rankdir=LR;\n')
+                                f.write('struct [label = \" ')
+                                #temp=node
+                                count = 0
+                                while node.next is not None:
+                                    f.write('{}'.format(" |["+str(node.data_x)+","+str(node.data_y)+"]"))
+                                    node = node.next
+                                f.write('{}'.format(" |["+str(node.data_x)+","+str(node.data_y)+"]\" ];\n"))
+                                f.write('}')
+                                f.close()
+                                os.system('dot scoreList.dot -Tpng -o scoreList.png')
+                                os.system('scoreList.png')
+                                print_center(s, "score report created")
+
+                        #Scoreboard Report
+                        if current_row_report == 3:
+                            paint_title(s, "Scoreboard Report")
+
+                            node = Scoreboard.getHead()
+                            if node is None:
+                                print_center(s, "list empty")
+                            else:
+                                #Create report by graphiz
+                                f = open('scoreboardList.dot', 'w')
+                                f.write('digraph scoreboard{\n')
+                                f.write('node [shape=record];\n')
+                                f.write('rankdir=LR;\n')
+                                #temp=node
+                                count = 0
+                                while node.next is not None:
+                                    f.write('node{} [label=\"{}\"];\n'.format(count, "(" + str(node.data) + "," + str(node.data2) + ")"))
+                                    count += 1
+                                    f.write('node{} -> node{};\n'.format(count-1, count))
+                                    node = node.next
+                                f.write('node{} [label = \"{}\"];\n'.format(count, "(" + str(node.data) + "," + str(node.data2) + ")"))
+                                f.write('nodef [label = "null"];')
+                                f.write('node'+ str(count) + ' -> nodef;\n')
+                                f.write('}')
+                                f.close()
+                                os.system('dot scoreboardList.dot -Tpng -o scoreboardList.png')
+                                os.system('scoreboardList.png')
                                 print_center(s, "user report created")
                     elif key == 27:
                         paint_menu(s, current_row)
                         break
                     s.refresh()
+
+            #bulk loading
             elif current_row == 4:
                 paint_title(s, "Bulk loading")
                 s.addstr(9, 20, "File: ")
