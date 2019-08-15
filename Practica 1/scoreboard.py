@@ -25,7 +25,33 @@ class queue:
     def dequeue(self):
         self.head = self.head.next
 
+    def queue_count(self):
+        size = 1
+        if self.head is None:
+            size = 0
+        else:
+            temp=self.head
+            while temp.next is not None:
+                size = size + 1
+                temp=temp.next
+        return size
 
+    def count_list(self):
+        size = 1
+        if self.head is None:
+            #print('Lista Vacia')
+            size = 0
+        else:
+            temp=self.head
+            while temp.next is not None:
+                size = size + 1
+                temp=temp.next
+        #print("EL tamanio de la lista es", end = " ")
+        #print(size)
+        return size
+
+    def getHead(self):
+        return self.head
 
 #metodo imprimir
     def print_list(self):
@@ -33,19 +59,23 @@ class queue:
             print('Lista Vacia')
         else:
             temp=self.head
-        while temp.next is not None:
-            print(temp.data, end = " ")
+            while temp.next is not None:
+                print(temp.data, end = " ")
+                print(temp.data2, end = " ")
+                print(" ")
+                temp=temp.next
+            print (temp.data, end = ' ')
             print(temp.data2, end = " ")
-            print(" ")
-            temp=temp.next
-        print (temp.data, end = ' ')
-        print(temp.data2, end = " ")
 
-s = queue()
-s.enqueue("juan", 1)
-s.enqueue("Pedro", 2)
-s.enqueue("Esteban", 3)
-s.print_list()
-print(" ")
-s.dequeue()
-s.print_list()
+#s = queue()
+#s.enqueue("juan", 1)
+#s.enqueue("Pedro", 2)
+#s.enqueue("Esteban", 3)
+#s.print_list()
+#print(" ")
+#s.dequeue()
+#s.print_list()
+#print("Tamanio: ", end = ' ')
+#count = s.queue_count()
+#print(str(count))
+#s.queue_count()
